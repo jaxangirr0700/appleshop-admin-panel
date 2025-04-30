@@ -1,4 +1,4 @@
-import { UserType } from "../../components/users/UsersPage";
+import { UserType } from "../../types/users";
 import { api } from "../api";
 class UsersApi {
   static getAll() {
