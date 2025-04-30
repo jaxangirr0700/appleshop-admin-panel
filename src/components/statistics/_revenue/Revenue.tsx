@@ -1,5 +1,3 @@
-"use client";
-
 import { Alert, Card, DatePicker, Spin } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
