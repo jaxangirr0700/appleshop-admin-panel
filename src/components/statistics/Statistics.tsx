@@ -22,7 +22,7 @@ function Statistics() {
   const users: UserType[] = UsersData?.items ?? [];
 
   return (
-    <div className="p-4 sm:p-6">
+    <div className="p-4 sm:p-6 h-full overflow-y-auto">
       <h1 className="text-xl  sm:text-2xl font-semibold mb-4">
         Boshqaruv paneli
       </h1>

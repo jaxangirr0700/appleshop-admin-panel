@@ -16,11 +16,12 @@ import useGlobalStore from "./store/my-store";
 function App() {
   const MyAuthState = useAuthStore();
   const { newTheme } = useGlobalStore();
+  console.log(newTheme);
 
   return (
     <div
-      className={`w-full h-full${
-        newTheme ? " bg-cyan-950 text-white" : " bg-white text-black"
+      className={`w-full h-full ${
+        newTheme ? "bg-cyan-950 text-white" : " bg-white text-black"
       }`}
     >
       <ConfigProvider
@@ -28,7 +29,7 @@ function App() {
           algorithm: newTheme ? theme.darkAlgorithm : theme.defaultAlgorithm,
         }}
       >
-        <div className="min-h-screen p-2">
+        <div className="min-h-screen p-2  ">
           {MyAuthState.token ? (
             <div className="max-w-[1440px] mx-auto">
               <Header />

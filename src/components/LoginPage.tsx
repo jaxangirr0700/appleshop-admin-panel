@@ -47,6 +47,9 @@ function LoginPage() {
             name="email"
             rules={[{ required: true, message: "Please input your email!" }]}
           >
+            <label className="text-slate-600 font-semibold text-lg md:text-xl tracking-wide">
+              Email
+            </label>
             <Input placeholder="Email" />
           </Form.Item>
 
@@ -54,6 +57,9 @@ function LoginPage() {
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
+            <label className="text-slate-600 font-semibold text-lg md:text-xl tracking-wide">
+              Password
+            </label>
             <Input.Password placeholder="Password" />
           </Form.Item>
 
