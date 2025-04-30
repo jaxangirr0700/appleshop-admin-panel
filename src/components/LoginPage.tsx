@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, message, Modal } from "antd";
 import React, { useState } from "react";
 import useAuthStore from "../store/my-auth-store";
 import { api } from "../utils/api";
@@ -26,8 +26,9 @@ function LoginPage() {
 
       setLoading(false);
       navigate("/");
-    } catch (e) {
-      console.error("Login failed:", e);
+    } catch (error) {
+      console.log(error);
+      message.error("Parolni yoki emailni tekshiring!");
       setLoading(false);
     }
   };
@@ -36,7 +37,7 @@ function LoginPage() {
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <Modal open={true} footer={null} closable={false}>
         <Form
-          initialValues={{ email: "Jaxangir", password: "070000" }}
+          initialValues={{ email: "admin@nt.uz", password: "pass123" }}
           onFinish={onFinish}
           className="hover:scale-101 transition-all duration-500 p-4"
         >
