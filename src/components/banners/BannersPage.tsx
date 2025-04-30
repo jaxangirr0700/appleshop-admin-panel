@@ -1,18 +1,14 @@
 "use client";
 import { Button, Switch, Table } from "antd";
 import React, { useState } from "react";
-import useAuthStore from "../../store/my-auth-store";
+import { BannersDataType, BannerType } from "../../types/banners-type";
 import { useDeleteData } from "../../utils/axiosData/deleteData";
 import { useFetchData } from "../../utils/axiosData/getData";
 import { PatchtData } from "../../utils/axiosData/PatchData";
 import AddBanners from "./edits/AddBanner";
 import EditBanners from "./edits/EditBanner";
-import { BannersDataType, BannerType } from "../../types/banners-type";
-
-
 
 function BannersPage() {
-  const MyAuthState = useAuthStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -110,12 +106,7 @@ function BannersPage() {
                       imageUrl: banner.imageUrl,
                       isActive: !banner.isActive,
                     };
-                    PatchtData(
-                      `banners/${banner.id}`,
-                      newBanner,
-                      MyAuthState.token,
-                      fetchData
-                    );
+                    PatchtData(`banners/${banner.id}`, newBanner, fetchData);
                     fetchData();
                   }}
                   checked={isActive}
