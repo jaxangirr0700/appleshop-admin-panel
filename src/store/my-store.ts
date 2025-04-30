@@ -1,12 +1,12 @@
+import { create } from "zustand";
 import {
-  CategoriesTypes,
+  CategoriesType,
   GroupType,
   OrdersTypes,
   ProductTypes,
   StudentTypes,
 } from "../types/globalStore";
 import { getRandomID } from "../utils/number";
-import { create } from "zustand";
 
 const useGlobalStore = create(() => {
   const studentIdReal = getRandomID();
@@ -39,7 +39,7 @@ const useGlobalStore = create(() => {
       status: "qabul_qilindi",
     },
   ];
-  const initialCategories: CategoriesTypes[] = [
+  const initialCategories: CategoriesType[] = [
     {
       id: cartegorieIdReal,
       active: true,
@@ -73,7 +73,7 @@ const useGlobalStore = create(() => {
     typeof window !== "undefined"
       ? JSON.parse(localStorage.getItem("groups") || "[]")
       : [];
-  const storedCategories: CategoriesTypes[] =
+  const storedCategories: CategoriesType[] =
     typeof window !== "undefined"
       ? JSON.parse(localStorage.getItem("categories") || "[]")
       : [];
@@ -88,7 +88,6 @@ const useGlobalStore = create(() => {
   const storedTheme =
     typeof window !== "undefined" ? localStorage.getItem("theme") : null;
 
-
   return {
     students: storedStudents.length > 0 ? storedStudents : initialStudents,
     groups: storedGroups.length > 0 ? storedGroups : initialGroups,
@@ -98,7 +97,6 @@ const useGlobalStore = create(() => {
     orders: storedOrders.length > 0 ? storedOrders : initialOrders,
     language: "uzbek",
     newTheme: storedTheme ? JSON.parse(storedTheme) : false,
-
   };
 });
 
