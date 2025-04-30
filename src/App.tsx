@@ -16,7 +16,6 @@ import useGlobalStore from "./store/my-store";
 function App() {
   const MyAuthState = useAuthStore();
   const { newTheme } = useGlobalStore();
-  console.log(newTheme);
 
   return (
     <div

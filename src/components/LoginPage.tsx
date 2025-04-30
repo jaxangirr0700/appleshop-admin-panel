@@ -37,6 +37,7 @@ function LoginPage() {
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <Modal open={true} footer={null} closable={false}>
         <Form
+          layout="vertical"
           initialValues={{ email: "admin@nt.uz", password: "pass123" }}
           onFinish={onFinish}
           className="hover:scale-101 transition-all duration-500 p-4"
@@ -45,21 +46,17 @@ function LoginPage() {
 
           <Form.Item
             name="email"
+            label="Email"
             rules={[{ required: true, message: "Please input your email!" }]}
           >
-            <label className="text-slate-600 font-semibold text-lg md:text-xl tracking-wide">
-              Email
-            </label>
             <Input placeholder="Email" />
           </Form.Item>
 
           <Form.Item
             name="password"
+            label="Password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <label className="text-slate-600 font-semibold text-lg md:text-xl tracking-wide">
-              Password
-            </label>
             <Input.Password placeholder="Password" />
           </Form.Item>
 
