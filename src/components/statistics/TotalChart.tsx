@@ -53,7 +53,7 @@ export function ApexChartTotal() {
   });
 
   return (
-    <div>
+    <div className="container">
       <ReactApexChart
         type="line"
         height={350}

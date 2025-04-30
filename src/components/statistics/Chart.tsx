@@ -53,7 +53,7 @@ export const ApexChart = () => {
   });
 
   return (
-    <div>
+    <div className=" container">
       <ReactApexChart
         type="line"
         height={350}

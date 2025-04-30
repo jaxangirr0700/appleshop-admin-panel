@@ -23,10 +23,11 @@ function Statistics() {
 
   return (
     <div className="p-4 sm:p-6">
-      <ApexChart />
       <h1 className="text-xl  sm:text-2xl font-semibold mb-4">
         Boshqaruv paneli
       </h1>
+      <ApexChart />
+
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} md={6}>
           <Card loading={loading}>
