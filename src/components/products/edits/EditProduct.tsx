@@ -1,22 +1,29 @@
-import { Button, Drawer, Form, Input, InputNumber, Select } from "antd";
-import axios from "axios";
-import useAuthStore from "../../../store/my-auth-store";
-import { ProductType } from "../../../types/product";
+import {
+  Button,
+  Drawer,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Select,
+} from "antd";
 import { CategoryType } from "../../../types/categories";
+import { ProductType } from "../../../types/product";
+import { api } from "../../../utils/api";
 
 function EditProduct({
   categories,
   open,
-
   product,
   setEditProduct,
+  fetchData,
 }: {
+  fetchData: () => void;
   product: ProductType | null;
   open: boolean;
   categories: CategoryType[];
   setEditProduct: (product: ProductType | null) => void;
 }) {
-  const MyAuthState = useAuthStore();
 
   return (
     <Drawer
@@ -30,18 +37,15 @@ function EditProduct({
         initialValues={product ? product : {}}
         onFinish={(values: ProductType) => {
           if (product) {
-            axios
-              .patch(
-                `https://nt.softly.uz/api/products/${product.id}`,
-                { ...values, categoryId: values.categoryId },
-                {
-                  headers: {
-                    Authorization: `Bearer ${MyAuthState.token}`,
-                  },
-                }
-              )
+            api
+              .patch(`https://nt.softly.uz/api/products/${product.id}`, {
+                ...values,
+                categoryId: values.categoryId,
+              })
               .then(() => {
                 setEditProduct(null);
+                fetchData();
+                message.success("Mahsulot muvaffaqiyatli o'zgartirildi!");
               })
               .catch((error) => {
                 console.error("Error updating product:", error);

@@ -1,10 +1,9 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Drawer, Form, InputNumber, Select } from "antd";
-import useAuthStore from "../../../store/my-auth-store";
-import { useFetchData } from "../../../utils/axiosData/getData";
-import { Postdata } from "../../../utils/axiosData/postdata";
 import { ProductDataType } from "../../../types/product";
 import { UserDatatype } from "../../../types/users";
+import { useFetchData } from "../../../utils/axiosData/getData";
+import { Postdata } from "../../../utils/axiosData/postdata";
 
 function AddOrders({
   onClose,
@@ -17,7 +16,6 @@ function AddOrders({
   showDrawer: () => void;
   getOrders: () => void;
 }) {
-  const MyAuthState = useAuthStore();
   const { data: productData } = useFetchData<ProductDataType>(`/products`);
   const { data: usersData } = useFetchData<UserDatatype>(`/users`);
 
@@ -45,9 +43,7 @@ function AddOrders({
                 },
               ],
             };
-            Postdata(`orders/`, newOrders, MyAuthState.token);
-            getOrders();
-            onClose();
+            Postdata(`orders/`, newOrders, getOrders, onClose);
           }}
         >
           <Form.Item

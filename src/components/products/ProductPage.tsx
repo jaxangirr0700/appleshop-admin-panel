@@ -47,12 +47,14 @@ function ProductPage() {
         onClose={onCloseAdd}
         open={addOpen}
         showDrawer={showAddDrawer}
+        fetchData={fetchData}
       />
       <EditProduct
         categories={categories}
         open={editOpen}
         product={editProduct}
         setEditProduct={setEditProduct}
+        fetchData={fetchData}
       />
       <div style={{ overflowX: "auto" }}>
         <Table

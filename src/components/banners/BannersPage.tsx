@@ -33,7 +33,9 @@ function BannersPage() {
   const handleDelete = async (id: number) => {
     setLoadingId(id);
     try {
-      await deleteData(`products/${id}`, fetchData);
+      await deleteData(`products/${id}`, fetchData).then(() => {
+        fetchData();
+      });
     } finally {
       setLoadingId(null);
     }
@@ -46,6 +48,7 @@ function BannersPage() {
           onCloseAdd={onCloseAdd}
           addOpen={addOpen}
           showAddDrawer={showAddDrawer}
+          fetchData={fetchData}
         />
         <EditBanners
           open={editOpen}

@@ -3,12 +3,12 @@ import ReactApexChart from "react-apexcharts";
 import { OrderTotelType, PostdateType } from "../../types/orderDates";
 import { api } from "../../utils/api";
 
-export function ApexChartTotal() {
+export function ApexChartTotal({
+  postDeta,
+}: {
+  postDeta: PostdateType | undefined;
+}) {
   const [orderTotals, setOrderTotals] = useState<OrderTotelType[]>([]);
-  const [date, setDate] = useState<PostdateType>({
-    startDate: "",
-    endDate: "",
-  });
 
   useEffect(() => {
     const fetchData = () => {
@@ -26,12 +26,11 @@ export function ApexChartTotal() {
       const startDate = `${startYear}-${startMonth}-${startDay}`;
 
       const datePayload = { startDate, endDate };
-      setDate(datePayload);
 
       api
         .post(
           "https://nt.softly.uz/api/statistics/daily-order-totals",
-          datePayload
+          postDeta ? postDeta : datePayload
         )
         .then((res) => {
           setOrderTotals(res.data || []);
@@ -44,13 +43,7 @@ export function ApexChartTotal() {
     fetchData();
     const intervalId = setInterval(fetchData, 60000);
     return () => clearInterval(intervalId);
-  }, []);
-
-  const categories = [...Array(30)].map((_, i) => {
-    const day = i + 1;
-    const month = date.startDate.split("-")[1] || "";
-    return `${day} ${month}`;
-  });
+  }, [postDeta]);
 
   return (
     <div className="container">
@@ -91,7 +84,7 @@ export function ApexChartTotal() {
             curve: "smooth",
           },
           xaxis: {
-            categories,
+            categories: orderTotals.map((item) => item.date.slice(8, 10)),
             position: "top",
             axisBorder: {
               show: false,
@@ -127,7 +120,7 @@ export function ApexChartTotal() {
             },
           },
           title: {
-            text: "Oxirgi 30 kunlik buyurtmalar summasi statistikasi",
+            text: `Oxirgi ${orderTotals.length} kunlik buyurtmalar summasi statistikasi`,
             floating: false,
             offsetY: 330,
             align: "left",

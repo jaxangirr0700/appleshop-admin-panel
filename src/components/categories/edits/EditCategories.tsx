@@ -14,7 +14,6 @@ function EditCategories({
   category: CategoryType | null;
   fetchData: () => void;
 }) {
-
   return (
     <>
       <Drawer

@@ -1,4 +1,4 @@
-import { Button, Table } from "antd";
+import { Button, Table, Tag } from "antd";
 import React, { useState } from "react";
 import { useDeleteData } from "../../utils/axiosData/deleteData";
 import { useFetchData } from "../../utils/axiosData/getData";
@@ -11,6 +11,8 @@ function OrdersPage() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [addOpen, setAddOpen] = useState<boolean>(false);
   const [editOrder, setEditOrder] = useState<OrsderType | null>(null);
+  const [loadingId, setLoadingId] = useState<number | null>(null);
+
   const pageSize = 10;
   const {
     data: orderData,
@@ -20,7 +22,7 @@ function OrdersPage() {
     `/orders?limit=${pageSize}&page=${currentPage}&order=ASC`
   );
   const { data: usersData } = useFetchData<UserDatatype>(`/users`);
-  const { deleteData, loadingDelete } = useDeleteData();
+  const { deleteData } = useDeleteData();
 
   const showAddDrawer = () => setAddOpen(true);
   const onCloseAdd = () => setAddOpen(false);
@@ -29,6 +31,22 @@ function OrdersPage() {
   const total = orderData?.total || 0;
   const users: UserType[] = usersData?.items || [];
 
+  const handleDelete = async (id: number) => {
+    setLoadingId(id);
+    try {
+      await deleteData(`products/${id}`, fetchData).then(() => {
+        fetchData();
+      });
+    } finally {
+      setLoadingId(null);
+    }
+  };
+  const statusColors: Record<string, { label: string; color: string }> = {
+    pending: { label: "Qabul qilindi", color: "blue" },
+    processing: { label: "Yetkazilmoqda", color: "orange" },
+    delivered: { label: "Yetkazib berildi", color: "green" },
+    cancelled: { label: "Bekor qilindi", color: "red" },
+  };
   return (
     <div className="flex flex-col p-4">
       <AddOrders
@@ -80,6 +98,13 @@ function OrdersPage() {
           {
             title: "Status",
             dataIndex: "status",
+            render: (status: string) => {
+              const statusInfo = statusColors[status] || {
+                label: status,
+                color: "default",
+              };
+              return <Tag color={statusInfo.color}>{statusInfo.label}</Tag>;
+            },
           },
 
           {
@@ -92,10 +117,10 @@ function OrdersPage() {
             dataIndex: "id",
             render: (id) => (
               <Button
-                loading={loadingDelete}
+                loading={loadingId === id}
                 danger
-                onClick={async () => {
-                  await deleteData(`banners/${id}`, fetchData);
+                onClick={() => {
+                  handleDelete(id);
                 }}
               >
                 Delete

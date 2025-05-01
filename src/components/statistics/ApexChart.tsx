@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { OrderCountType, PostdateType } from "../../types/orderDates";
 import { api } from "../../utils/api";
+import { message } from "antd";
 
-export const ApexChart = () => {
+export const ApexChart = ({
+  postDeta,
+}: {
+  postDeta: PostdateType | undefined;
+}) => {
   const [orderCount, setOrderCount] = useState<OrderCountType[]>([]);
-  const [date, setDate] = useState<PostdateType>({
-    startDate: "",
-    endDate: "",
-  });
 
   useEffect(() => {
     const fetchData = () => {
@@ -17,7 +18,6 @@ export const ApexChart = () => {
       const endMonth = String(today.getMonth() + 1).padStart(2, "0");
       const endDay = String(today.getDate()).padStart(2, "0");
       const endDate = `${endYear}-${endMonth}-${endDay}`;
-
       const prevMonthDate = new Date(today);
       prevMonthDate.setMonth(prevMonthDate.getMonth() - 1);
       const startYear = prevMonthDate.getFullYear();
@@ -26,47 +26,43 @@ export const ApexChart = () => {
       const startDate = `${startYear}-${startMonth}-${startDay}`;
 
       const datePayload = { startDate, endDate };
-      setDate(datePayload);
 
       api
         .post(
           "https://nt.softly.uz/api/statistics/daily-order-counts",
-          datePayload
+          postDeta ? postDeta : datePayload
         )
         .then((res) => {
-          setOrderCount(res.data || []);
+          setOrderCount(res.data);
         })
         .catch((e) => {
           console.error(e.response?.data || e.message);
+          message.error(
+            e.response?.data?.message || "Chart bilan xatolik yuz berdi"
+          );
         });
     };
 
     fetchData();
     const intervalId = setInterval(fetchData, 60000);
     return () => clearInterval(intervalId);
-  }, []);
-
-  const categories = [...Array(30)].map((_, i) => {
-    const day = i + 1;
-    const month = date.startDate.split("-")[1] || "";
-    return `${day} ${month}`;
-  });
+  }, [postDeta]);
 
   return (
     <div className=" container">
       <ReactApexChart
-        type="line"
+        type="area"
         height={350}
         series={[
           {
-            name: "Buyurtmalar summasi",
+            name: "Buyurtmalar soni",
             data: orderCount.map((item) => Number(item.count)),
           },
         ]}
         options={{
           chart: {
             height: 350,
-            type: "line",
+            type: "area",
           },
           plotOptions: {
             bar: {
@@ -77,13 +73,21 @@ export const ApexChart = () => {
             },
           },
           dataLabels: {
-            enabled: true,
+            background: {
+              enabled: false,
+              foreColor: "#fff",
+              padding: 6,
+              borderRadius: 5,
+              borderWidth: 1,
+              borderColor: "#304758",
+              opacity: 0.9,
+            },
             formatter: function (val) {
               return val.toString();
             },
-            offsetY: -20,
+            offsetY: 0,
             style: {
-              fontSize: "10px",
+              fontSize: "0px",
               colors: ["#304758"],
             },
           },
@@ -91,7 +95,13 @@ export const ApexChart = () => {
             curve: "smooth",
           },
           xaxis: {
-            categories,
+            categories: orderCount.map((item) => item.date.slice(8, 10)),
+            labels: {
+              rotate: -45,
+              style: {
+                fontSize: "10px",
+              },
+            },
             position: "top",
             axisBorder: {
               show: false,
@@ -127,7 +137,7 @@ export const ApexChart = () => {
             },
           },
           title: {
-            text: "Oxirgi 30 kunlik buyurtmalar statistikasi",
+            text: `Oxirgi ${orderCount.length} kunlik buyurtmalar statistikasi`,
             floating: false,
             offsetY: 330,
             align: "left",

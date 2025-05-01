@@ -4,13 +4,15 @@ import {
   ShoppingCartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Card, Col, Row, Table } from "antd";
-import React from "react";
+import { Card, Col, DatePicker, Row, Table } from "antd";
+import React, { useState } from "react";
 import { DashboardType } from "../../types/statistics";
 import { UserDatatype, UserType } from "../../types/users";
 import { useFetchData } from "../../utils/axiosData/getData";
-import { ApexChart } from "./Chart";
+import { ApexChart } from "./ApexChart";
 import { ApexChartTotal } from "./TotalChart";
+import { PostdateType } from "../../types/orderDates";
+const { RangePicker } = DatePicker;
 
 function Statistics() {
   const { data: DashboardData, loading } = useFetchData<DashboardType>(
@@ -20,13 +22,22 @@ function Statistics() {
   const { data: UsersData } = useFetchData<UserDatatype>(`/users`);
   const topProducts = DashboardData?.topProducts;
   const users: UserType[] = UsersData?.items ?? [];
+  const [postDeta, setPostDeta] = useState<PostdateType | undefined>();
 
   return (
     <div className="p-4 sm:p-6 h-full overflow-y-auto">
       <h1 className="text-xl  sm:text-2xl font-semibold mb-4">
         Boshqaruv paneli
       </h1>
-      <ApexChart />
+      <RangePicker
+        onChange={(e) => {
+          setPostDeta({
+            startDate: String(e?.[0]?.format("YYYY-MM-DD")),
+            endDate: String(e?.[1]?.format("YYYY-MM-DD")),
+          });
+        }}
+      />
+      <ApexChart postDeta={postDeta} />
 
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} md={6}>
@@ -100,7 +111,7 @@ function Statistics() {
           </Card>
         </Col>
       </Row>
-      <ApexChartTotal />
+      <ApexChartTotal postDeta={postDeta} />
 
       <Row gutter={[16, 16]} className="mt-6">
         <Col xs={24} md={16}>

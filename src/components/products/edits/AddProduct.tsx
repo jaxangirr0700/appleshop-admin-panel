@@ -8,24 +8,22 @@ import {
   message,
   Select,
 } from "antd";
-import axios from "axios";
 import { useState } from "react";
-import useAuthStore from "../../../store/my-auth-store";
-import { useFetchData } from "../../../utils/axiosData/getData";
 import { CategoryDataType } from "../../../types/categories";
-
-
+import { api } from "../../../utils/api";
+import { useFetchData } from "../../../utils/axiosData/getData";
 
 function AddProduct({
   onClose,
   open,
   showDrawer,
+  fetchData,
 }: {
+  fetchData: () => void;
   onClose: () => void;
   open: boolean;
   showDrawer: () => void;
 }) {
-  const MyAuthState = useAuthStore();
   const { data: categoryData } = useFetchData<CategoryDataType>(`/categories`);
 
   const categories = categoryData?.items || [];
@@ -51,14 +49,12 @@ function AddProduct({
           initialValues={{}}
           onFinish={(values) => {
             setLoading(true);
-            axios
-              .post(`https://nt.softly.uz/api/products`, values, {
-                headers: { Authorization: `Bearer ${MyAuthState.token}` },
-              })
+            api
+              .post(`https://nt.softly.uz/api/products`, values)
               .then(() => {
                 message.success("Mahsulot muvaffaqiyatli qo'shildi!");
                 onClose();
-                window.location.reload();
+                fetchData();
               })
               .catch((e) => {
                 message.error(e.response.data.message || "Xato yuz berdi");

@@ -1,12 +1,19 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Drawer, Form, Input } from "antd";
 import FormItem from "antd/es/form/FormItem/index.js";
-import useAuthStore from "../../../store/my-auth-store";
 import { Postdata } from "../../../utils/axiosData/postdata";
 
-function AddCategories({ onCloseAdd, addOpen, showAddDrawer }: any) {
-  const MyAuthState = useAuthStore();
-
+function AddCategories({
+  onCloseAdd,
+  addOpen,
+  showAddDrawer,
+  fetchData,
+}: {
+  onCloseAdd: () => void;
+  addOpen: boolean;
+  showAddDrawer: () => void;
+  fetchData: () => void;
+}) {
   return (
     <>
       <Button type="primary" onClick={showAddDrawer} icon={<PlusOutlined />}>
@@ -27,7 +34,7 @@ function AddCategories({ onCloseAdd, addOpen, showAddDrawer }: any) {
         <Form
           layout="vertical"
           onFinish={(values) => {
-            Postdata(`categories`, values, MyAuthState.token);
+            Postdata(`categories`, values, fetchData, onCloseAdd);
           }}
         >
           <FormItem

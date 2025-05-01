@@ -40,6 +40,7 @@ function CategoriesPage() {
         addOpen={addOpen}
         showAddDrawer={showAddDrawer}
         onCloseAdd={onCloseAdd}
+        fetchData={fetchData}
       />
       <EditCategories
         onCloseEdit={onCloseEdit}

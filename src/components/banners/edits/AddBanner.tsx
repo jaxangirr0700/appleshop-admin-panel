@@ -11,9 +11,8 @@ import {
   UploadProps,
 } from "antd";
 
-import useAuthStore from "../../../store/my-auth-store";
-import { Postdata } from "../../../utils/axiosData/postdata";
 import { useState } from "react";
+import { Postdata } from "../../../utils/axiosData/postdata";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -38,7 +37,9 @@ function AddBanners({
   onCloseAdd,
   addOpen,
   showAddDrawer,
+  fetchData,
 }: {
+  fetchData: () => void;
   onCloseAdd: () => void;
   addOpen: boolean;
   showAddDrawer: () => void;
@@ -46,7 +47,6 @@ function AddBanners({
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
 
-  const MyAuthState = useAuthStore();
   const handleChange: UploadProps["onChange"] = (info) => {
     if (info.file.status === "uploading") {
       setLoading(true);
@@ -93,11 +93,7 @@ function AddBanners({
               imageUrl: imageUrl,
             };
 
-            Postdata(`banners`, newValues, MyAuthState.token).then(() => {
-              onCloseAdd();
-              message.success("Banner muvaffaqiyatli qo'shildi");
-              setImageUrl(undefined);
-            });
+            Postdata(`banners`, newValues, fetchData, onCloseAdd);
           }}
         >
           <Form.Item

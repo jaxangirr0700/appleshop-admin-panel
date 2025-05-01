@@ -48,7 +48,12 @@ function UsersPage() {
       </div>
 
       <div className="flex flex-col my-5 w-full">
-        <AddUsers onClose={onClose} open={AddOpen} showDrawer={showDrawer} />
+        <AddUsers
+          onClose={onClose}
+          open={AddOpen}
+          showDrawer={showDrawer}
+          fetchData={fetchData}
+        />
         <EditUser
           onCloseEdit={onCloseEdit}
           open={editOpen}

@@ -5,25 +5,26 @@ import {
   Drawer,
   Form,
   Input,
+  message,
   Radio,
   RadioChangeEvent,
 } from "antd";
 import FormItem from "antd/es/form/FormItem/index.js";
-import axios from "axios";
 import { useState } from "react";
-import useAuthStore from "../../../store/my-auth-store";
+import { api } from "../../../utils/api";
 type SizeType = ConfigProviderProps["componentSize"];
 
 function AddUsers({
   onClose,
   open,
   showDrawer,
+  fetchData,
 }: {
+  fetchData: () => void;
   onClose: () => void;
   open: boolean;
   showDrawer: () => void;
 }) {
-  const MyAuthState = useAuthStore();
   const [size, setSize] = useState<SizeType>("middle");
   const handleSizeChange = (e: RadioChangeEvent) => {
     setSize(e.target.value);
@@ -59,14 +60,13 @@ function AddUsers({
             role: "customer",
           }}
           onFinish={(values) => {
-            axios
-              .post(`https://nt.softly.uz/api/users`, values, {
-                headers: { Authorization: `Bearer ${MyAuthState.token}` },
-              })
+            api
+              .post(`https://nt.softly.uz/api/users`, values)
               .then((res) => {
                 console.log(res);
+                fetchData();
                 onClose();
-                window.location.reload();
+                message.success(`Foydalanuvchi muvaffaqiyatli qo'shildi!`);
               })
               .catch((e) => {
                 console.log(e);

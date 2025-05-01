@@ -1,12 +1,18 @@
 "use client";
+import { message } from "antd";
 import { api } from "../api";
-export function Postdata(apiEndPoint: string, values: unknown, token: string) {
+export function Postdata(
+  apiEndPoint: string,
+  values: unknown,
+  fetchData: () => void,
+  onCloseAdd: () => void
+) {
   return api
-    .post(`${apiEndPoint}`, values, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    .then((res) => {
-      console.log(res);
+    .post(`${apiEndPoint}`, values)
+    .then(() => {
+      fetchData();
+      message.success("Muvaffaqiyatli saqlandi");
+      onCloseAdd();
     })
     .catch((e) => {
       console.log(e.response.data);
